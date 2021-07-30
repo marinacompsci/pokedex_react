@@ -40,7 +40,6 @@ export default class App extends React.Component {
   pokemonSelected(id) {
     const index = id - 1;
     const infoObj = this.getPokemonObject(index);
-    console.log(infoObj);
     getPokemonDescription(id).then((descr) => {
       const obj = {
         id: Number(id),
@@ -69,9 +68,6 @@ export default class App extends React.Component {
   flipPage(summand) {
     let id = this.state.selectedPokemonObject.id;
     const index = id - 1;
-    console.log("id: " + id);
-    console.log("flipage Index: " + index);
-
     if (summand === -1 && index === 0) {
       // clicking on 'Previous' while at first element
       this.setState({ prevIsDisabled: true });
