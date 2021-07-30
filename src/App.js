@@ -32,16 +32,18 @@ export default class App extends React.Component {
     });
   }
 
-  getPokemonObject(name) {
-    return this.state.list.find((el) => el.name === name);
+  getPokemonObject(index) {
+    //return this.state.list.find((el) => el.name === name);
+    return this.state.list[index];
   }
 
-  pokemonSelected(name) {
-    let infoObj = this.getPokemonObject(name);
-    let index = this.state.list.indexOf(infoObj);
-    let id = index + 1;
+  pokemonSelected(id) {
+    const index = id - 1;
+    const infoObj = this.getPokemonObject(index);
+    console.log(infoObj);
     getPokemonDescription(id).then((descr) => {
       const obj = {
+        id: Number(id),
         name: infoObj.name,
         url: getPokemonSpriteUrl(id),
         description: descr
@@ -50,38 +52,41 @@ export default class App extends React.Component {
     });
 
     if (index === 0) {
+      // first element
       if (this.state.nextIsDisabled) this.setState({ nextIsDisabled: false });
       this.setState({ prevIsDisabled: true });
     } else if (index === this.state.list.length - 1) {
+      // last element
       if (this.state.prevIsDisabled) this.setState({ prevIsDisabled: false });
       this.setState({ nextIsDisabled: true });
     } else {
+      // any in between
       if (this.state.prevIsDisabled) this.setState({ prevIsDisabled: false });
       if (this.state.nextIsDisabled) this.setState({ nextIsDisabled: false });
     }
   }
 
   flipPage(summand) {
-    let id = this.state.list.indexOf(
-      this.getPokemonObject(this.state.selectedPokemonObject.name)
-    );
-    if (summand === -1 && id === 0) {
-      // clicking on 'Previous'
+    let id = this.state.selectedPokemonObject.id;
+    const index = id - 1;
+    console.log("id: " + id);
+    console.log("flipage Index: " + index);
+
+    if (summand === -1 && index === 0) {
+      // clicking on 'Previous' while at first element
       this.setState({ prevIsDisabled: true });
       return;
-    } else if (summand === 1 && id === this.state.list.length - 1) {
-      // clicking on 'Next'
+    } else if (summand === 1 && index === this.state.list.length - 1) {
+      // clicking on 'Next' while at last element
       this.setState({ nextIsDisabled: true });
       return;
     }
 
     id += summand;
 
-    console.log("flipage Id: " + id);
-
     if (this.state.prevIsDisabled) this.setState({ prevIsDisabled: false });
     if (this.state.nextIsDisabled) this.setState({ nextIsDisabled: false });
-    this.pokemonSelected(this.state.list[id].name);
+    this.pokemonSelected(id);
   }
 
   componentDidMount() {

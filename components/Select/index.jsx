@@ -43,7 +43,11 @@ export default function Select(props) {
       >
         <option defaultValue>Choose Pokemon</option>
         {props.list &&
-          props.list.map((pokemon) => <option key={pokemon}>{pokemon}</option>)}
+          props.list.map((pokemon, index) => (
+            <option key={pokemon} value={index + 1}>
+              {pokemon}
+            </option>
+          ))}
       </SelectEl>
     </Wrapper>
   );
